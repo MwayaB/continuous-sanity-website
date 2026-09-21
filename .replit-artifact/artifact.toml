@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Continuous Sanity"
+description = "A polished product landing page for Continuous Sanity, a lightweight browser layer that helps teams turn real user testing into structured product evidence."
+version = "1.0.0"
+id = "artifacts/continuous-sanity"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 19376
+
+[services.development]
+run = "pnpm --filter @workspace/continuous-sanity run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/continuous-sanity", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/continuous-sanity/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "19376"
+BASE_PATH = "/"
