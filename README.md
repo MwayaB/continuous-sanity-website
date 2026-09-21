@@ -19,6 +19,34 @@ The artifact is also compatible with the workspace workflow, which supplies `POR
 PORT=5173 BASE_PATH=/ pnpm --dir artifacts/continuous-sanity build
 ```
 
+## Campaign attribution
+
+The landing page preserves `utm_source`, `utm_medium`, `utm_campaign`, and
+`utm_content` for the current browser tab and adds them to every Calendly demo
+link. No cookies, personal data, or fingerprinting are used.
+
+Demo clicks also dispatch a `demo_cta_clicked` browser event with campaign fields
+and a `location` of `hero`, `nav`, or `footer`. To retain these events, set
+`VITE_CAMPAIGN_EVENT_ENDPOINT` at build time to an HTTPS endpoint that accepts a
+JSON `POST`. The payload is:
+
+```json
+{
+  "event": "demo_cta_clicked",
+  "properties": {
+    "source": "cold_email",
+    "medium": "outbound",
+    "campaign": "design_partner_discovery",
+    "content": "human_uat_v1",
+    "location": "hero"
+  }
+}
+```
+
+Without an endpoint, Calendly attribution still works and the browser event is
+available to a future first-party analytics listener; no network analytics
+request is made.
+
 ## Editing guide
 
 - Hero copy and page narrative live in `src/App.tsx`, in the `Hero`, `ProblemSection`, `HowItWorks`, and section components.

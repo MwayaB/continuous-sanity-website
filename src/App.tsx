@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type AnchorHTMLAttributes, type ReactNode } from 'react';
 import {
   Activity,
   ArrowRight,
@@ -30,6 +30,12 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ErrorBoundary } from '@/components/error-boundary';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import {
+  appendCampaignToUrl,
+  captureCampaignAttribution,
+  trackDemoCtaClick,
+  type DemoCtaLocation,
+} from '@/lib/campaign-attribution';
 import NotFound from '@/pages/not-found';
 
 const queryClient = new QueryClient();
@@ -37,6 +43,24 @@ const queryClient = new QueryClient();
 // Replace these placeholders with the final Calendly and pilot email destinations.
 const DEMO_URL = 'https://calendly.com/mwayab/contiuous-sanity-demo';
 const PILOT_URL = 'mailto:mwayab@gmail.com?subject=Continuous%20Sanity%20pilot';
+
+function DemoLink({
+  location,
+  ...props
+}: AnchorHTMLAttributes<HTMLAnchorElement> & { location: DemoCtaLocation }) {
+  const [campaign] = useState(captureCampaignAttribution);
+
+  return (
+    <a
+      {...props}
+      href={appendCampaignToUrl(DEMO_URL, campaign)}
+      onClick={(event) => {
+        props.onClick?.(event);
+        if (!event.defaultPrevented) trackDemoCtaClick(campaign, location);
+      }}
+    />
+  );
+}
 
 function useReveal<T extends HTMLElement>() {
   const ref = useRef<T | null>(null);
@@ -109,7 +133,7 @@ function Header() {
         <nav className="hidden items-center gap-8 md:flex" aria-label="Main navigation">
           <a href="#how-it-works" className="nav-link" data-testid="link-how-it-works">How it works</a>
           <a href="#who-its-for" className="nav-link" data-testid="link-who-its-for">Who it&apos;s for</a>
-          <a href={DEMO_URL} className="nav-cta" data-testid="link-book-demo-nav">Book a demo <ArrowUpRight size={14} /></a>
+          <DemoLink location="nav" className="nav-cta" data-testid="link-book-demo-nav">Book a demo <ArrowUpRight size={14} /></DemoLink>
         </nav>
         <button
           type="button"
@@ -127,7 +151,7 @@ function Header() {
           <div className="flex flex-col gap-1">
             <a href="#how-it-works" onClick={close} className="rounded-lg px-3 py-3 text-sm font-semibold text-[#42514d]" data-testid="link-mobile-how-it-works">How it works</a>
             <a href="#who-its-for" onClick={close} className="rounded-lg px-3 py-3 text-sm font-semibold text-[#42514d]" data-testid="link-mobile-who-its-for">Who it&apos;s for</a>
-            <a href={DEMO_URL} className="mt-2 inline-flex items-center justify-center gap-2 rounded-lg bg-[#183b34] px-4 py-3 text-sm font-bold text-[#f8faf5]" data-testid="link-mobile-book-demo">Book a demo <ArrowUpRight size={15} /></a>
+            <DemoLink location="nav" className="mt-2 inline-flex items-center justify-center gap-2 rounded-lg bg-[#183b34] px-4 py-3 text-sm font-bold text-[#f8faf5]" data-testid="link-mobile-book-demo">Book a demo <ArrowUpRight size={15} /></DemoLink>
           </div>
         </nav>
       )}
@@ -383,7 +407,7 @@ function Hero() {
             <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-[#cfe1d3] bg-[#f0f7f1] px-3 py-1.5 font-mono text-[10px] text-[#528066]"><span className="signal-dot size-1.5 rounded-full bg-[#6da980]" /> A browser layer for human UAT</div>
             <h1 className="max-w-[590px] text-[clamp(3.15rem,6.2vw,5.9rem)] font-semibold leading-[.95] tracking-[-.08em] text-[#1d3530]">Turn real user testing into <em className="font-serif font-normal text-[#56856c]">structured product evidence.</em></h1>
             <p className="mt-7 max-w-[500px] text-[16px] leading-7 text-[#64736d]">Continuous Sanity gives testers a lightweight browser layer for capturing feedback in context, then turns testing sessions into clear findings your product team can act on.</p>
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row"><a href={DEMO_URL} className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#183b34] px-5 py-3 text-[13px] font-bold text-[#f9fbf7] transition-transform duration-200 hover:-translate-y-0.5" data-testid="link-book-demo-hero">Book a demo <ArrowUpRight size={15} /></a><a href="#how-it-works" className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#cddbd2] bg-[#faf9f5] px-5 py-3 text-[13px] font-bold text-[#3f6255] transition-colors hover:bg-[#edf5ee]" data-testid="link-see-how-it-works">See how it works <ArrowRight size={15} /></a></div>
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row"><DemoLink location="hero" className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#183b34] px-5 py-3 text-[13px] font-bold text-[#f9fbf7] transition-transform duration-200 hover:-translate-y-0.5" data-testid="link-book-demo-hero">Book a demo <ArrowUpRight size={15} /></DemoLink><a href="#how-it-works" className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#cddbd2] bg-[#faf9f5] px-5 py-3 text-[13px] font-bold text-[#3f6255] transition-colors hover:bg-[#edf5ee]" data-testid="link-see-how-it-works">See how it works <ArrowRight size={15} /></a></div>
             <p className="mt-6 font-mono text-[10px] uppercase tracking-[.11em] text-[#8d9b94]">Built for UAT · beta testing · stakeholder review · exploratory testing</p>
           </Reveal>
           <Reveal delay="reveal-delay-1" className="relative z-10 lg:pt-8"><BrowserMockup /><div className="mt-4 flex items-center justify-between px-1 font-mono text-[9px] text-[#8c9b93]"><span className="flex items-center gap-2"><span className="size-1.5 rounded-full bg-[#70ad85]" /> Browser layer, not a replacement for automated testing</span><span className="hidden sm:block">/ live session</span></div></Reveal>
@@ -397,7 +421,7 @@ function FinalCTA() {
   return (
     <section id="book-demo" className="relative overflow-hidden bg-[#183b34]">
       <div className="pointer-events-none absolute -right-20 -top-32 size-[450px] rounded-full border border-[#5d9274]/30" /><div className="pointer-events-none absolute -right-4 -top-12 size-[260px] rounded-full border border-[#d68468]/25" />
-      <div className="mx-auto max-w-[1240px] px-5 py-24 sm:px-8 lg:px-10 lg:py-32"><Reveal className="relative z-10 max-w-[760px]"><SectionKicker>See it in the work</SectionKicker><h2 className="text-[clamp(2.5rem,5vw,5.1rem)] font-semibold leading-[.98] tracking-[-.075em] text-[#f5f8f2]">Run your next test with <em className="font-serif font-normal text-[#acdcb9]">Continuous Sanity.</em></h2><p className="mt-7 max-w-[480px] text-[15px] leading-7 text-[#b7c9bd]">Give a handful of testers a session, capture what happens in context, and see whether your team gets better evidence.</p><div className="mt-9 flex flex-col gap-3 sm:flex-row"><a href={DEMO_URL} className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#e8f5e9] px-5 py-3 text-[13px] font-bold text-[#234c3d] transition-transform hover:-translate-y-0.5" data-testid="link-book-demo-final">Book a demo <ArrowUpRight size={15} /></a><a href={PILOT_URL} className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#6b9980] px-5 py-3 text-[13px] font-bold text-[#e7f3e9] transition-colors hover:bg-[#2b5447]" data-testid="link-run-pilot-final">Run a pilot <ArrowRight size={15} /></a></div></Reveal></div>
+      <div className="mx-auto max-w-[1240px] px-5 py-24 sm:px-8 lg:px-10 lg:py-32"><Reveal className="relative z-10 max-w-[760px]"><SectionKicker>See it in the work</SectionKicker><h2 className="text-[clamp(2.5rem,5vw,5.1rem)] font-semibold leading-[.98] tracking-[-.075em] text-[#f5f8f2]">Run your next test with <em className="font-serif font-normal text-[#acdcb9]">Continuous Sanity.</em></h2><p className="mt-7 max-w-[480px] text-[15px] leading-7 text-[#b7c9bd]">Give a handful of testers a session, capture what happens in context, and see whether your team gets better evidence.</p><div className="mt-9 flex flex-col gap-3 sm:flex-row"><DemoLink location="footer" className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#e8f5e9] px-5 py-3 text-[13px] font-bold text-[#234c3d] transition-transform hover:-translate-y-0.5" data-testid="link-book-demo-final">Book a demo <ArrowUpRight size={15} /></DemoLink><a href={PILOT_URL} className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#6b9980] px-5 py-3 text-[13px] font-bold text-[#e7f3e9] transition-colors hover:bg-[#2b5447]" data-testid="link-run-pilot-final">Run a pilot <ArrowRight size={15} /></a></div></Reveal></div>
     </section>
   );
 }
