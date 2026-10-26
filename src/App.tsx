@@ -40,9 +40,9 @@ import NotFound from '@/pages/not-found';
 
 const queryClient = new QueryClient();
 
-// Replace these placeholders with the final Calendly and pilot email destinations.
+// Destinations for demo bookings and pilot sessions.
 const DEMO_URL = 'https://calendly.com/mwayab/contiuous-sanity-demo';
-const PILOT_URL = 'mailto:hello@continuoussanity.com?subject=Continuous%20Sanity%20pilot';
+const PILOT_URL = 'https://app.continuoussanity.com';
 
 function DemoLink({
   location,
