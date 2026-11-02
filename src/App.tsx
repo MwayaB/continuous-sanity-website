@@ -102,18 +102,18 @@ function Reveal({
   );
 }
 
-function BrandMark({ compact = false }: { compact?: boolean }) {
+function BrandMark({ compact = false, light = false }: { compact?: boolean; light?: boolean }) {
   return (
-    <span className="inline-flex items-center gap-2.5" data-testid="brand-continuous-sanity">
-      <span className="relative flex size-8 items-center justify-center rounded-[10px] bg-[#183b34] text-[#e9f7ef]">
+    <span className="inline-flex shrink-0 items-center gap-2.5 whitespace-nowrap" data-testid="brand-continuous-sanity">
+      <span className="flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-md bg-white">
         <img
           src="/assets/continuous-sanity-mark-cropped-v1.png"
-          alt="Continuous Sanity Logo"
-          className="size-full rounded-[10px] object-cover"
+          alt=""
+          className="block size-full object-contain"
         />
       </span>
       {!compact && (
-        <span className="text-[15px] font-bold tracking-[-0.04em] text-[#18312e]">
+        <span className={`text-[15px] font-bold leading-none tracking-[-0.04em] ${light ? 'text-[#f5f8f2]' : 'text-[#18312e]'}`}>
           Continuous Sanity
         </span>
       )}
@@ -429,7 +429,7 @@ function FinalCTA() {
 function Footer() {
   return (
     <footer className="bg-[#183b34]">
-      <div className="mx-auto flex max-w-[1240px] flex-col gap-10 border-t border-[#487161] px-5 py-8 sm:px-8 lg:flex-row lg:items-center lg:justify-between lg:px-10"><div><div className='invert'><BrandMark /></div><p className="mt-3 text-[12px] text-[#a8c0b0]">Human testing, captured properly.</p><p className="mt-1 font-mono text-[9px] text-[#7ea18c]">Built in Blantyre, Malawi</p></div><nav className="flex flex-wrap gap-x-6 gap-y-3 text-[11px] text-[#b5c9bb]" aria-label="Footer navigation"><a href="#product" className="transition-colors hover:text-white" data-testid="link-footer-product">Product</a><a href="#comparison" className="transition-colors hover:text-white" data-testid="link-footer-privacy">Privacy</a><a href="app.continuoussanity.com" className="transition-colors hover:text-white" data-testid="link-footer-contact">Contact</a></nav><p className="font-mono text-[9px] text-[#7ea18c]">© 2026 Continuous Sanity</p></div>
+      <div className="mx-auto flex max-w-[1240px] flex-col gap-10 border-t border-[#487161] px-5 py-8 sm:px-8 lg:flex-row lg:items-center lg:justify-between lg:px-10"><div><BrandMark light /><p className="mt-3 text-[12px] text-[#a8c0b0]">Human testing, captured properly.</p><p className="mt-1 font-mono text-[9px] text-[#7ea18c]">Built in Blantyre, Malawi</p></div><nav className="flex flex-wrap gap-x-6 gap-y-3 text-[11px] text-[#b5c9bb]" aria-label="Footer navigation"><a href="#product" className="transition-colors hover:text-white" data-testid="link-footer-product">Product</a><a href="#comparison" className="transition-colors hover:text-white" data-testid="link-footer-privacy">Privacy</a><a href="app.continuoussanity.com" className="transition-colors hover:text-white" data-testid="link-footer-contact">Contact</a></nav><p className="font-mono text-[9px] text-[#7ea18c]">© 2026 Continuous Sanity</p></div>
     </footer>
   );
 }
