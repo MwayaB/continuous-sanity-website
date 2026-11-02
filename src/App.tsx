@@ -133,7 +133,7 @@ function Header() {
         <nav className="hidden items-center gap-8 md:flex" aria-label="Main navigation">
           <a href="#how-it-works" className="nav-link" data-testid="link-how-it-works">How it works</a>
           <a href="#who-its-for" className="nav-link" data-testid="link-who-its-for">Who it&apos;s for</a>
-          <DemoLink location="nav" className="nav-cta" data-testid="link-book-demo-nav">Book a demo <ArrowUpRight size={14} /></DemoLink>
+          <DemoLink location="nav" className="inline-flex items-center gap-2 whitespace-nowrap" data-testid="link-book-demo-nav">Book a demo <ArrowUpRight size={14} className="shrink-0" /></DemoLink>
         </nav>
         <button
           type="button"
