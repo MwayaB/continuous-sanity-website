@@ -123,38 +123,21 @@ function BrandMark({ compact = false, light = false }: { compact?: boolean; ligh
 
 function Header() {
   const [open, setOpen] = useState(false);
+  const trigger = useRef<HTMLButtonElement>(null);
   const close = () => setOpen(false);
   return (
     <header className="sticky top-0 z-50 border-b border-[var(--cs-border)] bg-[var(--cs-surface)] backdrop-blur-xl">
       <div className="mx-auto flex h-[74px] max-w-[1240px] items-center justify-between px-5 sm:px-8 lg:px-10">
-        <a href="#top" onClick={close} aria-label="Continuous Sanity home" data-testid="link-home">
-          <BrandMark />
-        </a>
-        <nav className="hidden items-center gap-8 md:flex" aria-label="Main navigation">
-          <a href="#how-it-works" className="nav-link" data-testid="link-how-it-works">How it works</a>
-          <a href="#who-its-for" className="nav-link" data-testid="link-who-its-for">Who it&apos;s for</a>
-          <DemoLink location="nav" className="inline-flex items-center gap-2 whitespace-nowrap" data-testid="link-book-demo-nav">Book a demo <ArrowUpRight size={14} className="shrink-0" /></DemoLink>
-        </nav>
-        <button
-          type="button"
-          onClick={() => setOpen((value) => !value)}
-          className="flex size-10 items-center justify-center rounded-lg border border-[var(--cs-border)] text-[var(--cs-navy)] md:hidden"
-          aria-expanded={open}
-          aria-label={open ? 'Close navigation' : 'Open navigation'}
-          data-testid="button-mobile-menu"
-        >
-          {open ? <X size={19} /> : <Menu size={19} />}
+        <a href="#top" onClick={close} aria-label="Continuous Sanity home" data-testid="link-home"><BrandMark /></a>
+        <button ref={trigger} type="button" onClick={() => setOpen(value => !value)} className="flex size-11 items-center justify-center rounded-lg border border-[var(--cs-control-border)] text-[var(--cs-navy)] md:hidden" aria-expanded={open} aria-controls="primary-navigation" aria-label={open ? 'Close navigation' : 'Open navigation'} data-testid="button-mobile-menu">
+          {open ? <X size={19} aria-hidden="true" /> : <Menu size={19} aria-hidden="true" />}
         </button>
-      </div>
-      {open && (
-        <nav className="border-t border-[var(--cs-border)] bg-[var(--cs-surface)] px-5 py-4 md:hidden" aria-label="Mobile navigation">
-          <div className="flex flex-col gap-1">
-            <a href="#how-it-works" onClick={close} className="rounded-lg px-3 py-3 text-sm font-semibold text-[var(--cs-navy)]" data-testid="link-mobile-how-it-works">How it works</a>
-            <a href="#who-its-for" onClick={close} className="rounded-lg px-3 py-3 text-sm font-semibold text-[var(--cs-navy)]" data-testid="link-mobile-who-its-for">Who it&apos;s for</a>
-            <DemoLink location="nav" className="mt-2 inline-flex items-center justify-center gap-2 rounded-lg bg-[var(--cs-surface)] px-4 py-3 text-sm font-bold text-[var(--cs-muted)]" data-testid="link-mobile-book-demo">Book a demo <ArrowUpRight size={15} /></DemoLink>
-          </div>
+        <nav id="primary-navigation" className={`site-navigation ${open ? 'is-open' : ''}`} aria-label="Primary" onKeyDown={event => { if (event.key === 'Escape') { close(); trigger.current?.focus(); } }}>
+          <a href="#how-it-works" onClick={close} data-testid="link-how-it-works">How it works</a>
+          <a href="#who-its-for" onClick={close} data-testid="link-who-its-for">Who it&apos;s for</a>
+          <DemoLink location="nav" className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg px-4 py-3" data-testid="link-book-demo-nav">Book a demo <ArrowUpRight size={14} className="shrink-0" aria-hidden="true" /></DemoLink>
         </nav>
-      )}
+      </div>
     </header>
   );
 }
@@ -203,7 +186,7 @@ function BrowserMockup() {
             <div className="mb-3 flex justify-between"><span className="text-[9px] font-bold text-[var(--cs-navy)]">Order summary</span><span className="font-mono text-[9px] text-[var(--cs-muted)]">$148.00 / mo</span></div>
             <div className="flex justify-between border-t border-[var(--cs-border)] pt-2 text-[8px] text-[var(--cs-muted)]"><span>Northstar Pro plan</span><span>$148.00</span></div>
           </div>
-          <button type="button" className="mt-4 rounded-md bg-[var(--cs-surface)] px-5 py-2 text-[9px] font-bold text-white" data-testid="button-mockup-confirm">Confirm and pay</button>
+          <span className="mt-4 rounded-md bg-[var(--cs-surface)] px-5 py-2 text-[9px] font-bold text-white" data-testid="illustration-mockup-confirm">Confirm and pay</span>
           <div className="pointer-events-none absolute left-[56%] top-[57%] hidden sm:block">
             <div className="absolute -left-2 -top-2 size-4 rounded-full border-2 border-[var(--cs-border)] cs-context-pin-border bg-[var(--cs-surface)] shadow-[0_0_0_5px_rgba(223,123,93,.14)]" />
             <div className="absolute left-4 top-1 h-px w-16 bg-[var(--cs-surface)] cs-context-pin" />
@@ -222,8 +205,8 @@ function BrowserMockup() {
             <p className="mt-2 text-[9px] leading-[1.45] text-[var(--cs-muted)]">&quot;I expected this to save the card, not charge me yet.&quot;</p>
             <div className="mt-3 flex gap-1.5"><span className="rounded bg-[var(--cs-surface)] cs-feedback-tag px-1.5 py-1 text-[7px] font-bold text-[var(--cs-muted)]">Clarity</span><span className="rounded bg-[var(--cs-surface)] cs-feedback-tag px-1.5 py-1 text-[7px] font-bold text-[var(--cs-muted)]">Medium</span></div>
           </div>
-          <button type="button" className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-md bg-[var(--cs-surface)] py-2 text-[9px] font-bold text-white" data-testid="button-mockup-capture"><CircleDot size={11} /> Capture feedback</button>
-          <button type="button" className="mt-1.5 flex w-full items-center justify-center gap-1.5 rounded-md border border-[var(--cs-border)] bg-white py-2 text-[9px] font-bold text-[var(--cs-navy)]" data-testid="button-mockup-comment"><MessageSquare size={11} /> Add comment</button>
+          <span className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-md bg-[var(--cs-surface)] py-2 text-[9px] font-bold text-white" data-testid="illustration-mockup-capture"><CircleDot size={11} /> Capture feedback</span>
+          <span className="mt-1.5 flex w-full items-center justify-center gap-1.5 rounded-md border border-[var(--cs-border)] bg-white py-2 text-[9px] font-bold text-[var(--cs-navy)]" data-testid="illustration-mockup-comment"><MessageSquare size={11} /> Add comment</span>
           <div className="mt-4 border-t border-[var(--cs-border)] pt-3 text-[8px] text-[var(--cs-muted)]"><span className="font-bold text-[var(--cs-muted)]">Context attached</span><div className="mt-1.5 grid grid-cols-2 gap-y-1"><span>Page</span><span className="text-right font-mono">/checkout</span><span>Element</span><span className="text-right">Confirm and pay</span><span>Intent</span><span className="text-right">Complete purchase</span></div></div>
         </div>
       </div>
@@ -300,7 +283,7 @@ function SidePanelMockup() {
       <div className="flex items-center justify-between border-b border-[var(--cs-border)] pb-3"><div className="flex items-center gap-2"><span className="flex size-6 items-center justify-center rounded-md bg-[var(--cs-surface)] cs-illustration-icon text-[var(--cs-muted)]"><CircleDot size={13} /></span><div><p className="text-[10px] font-bold text-[var(--cs-navy)]">Continuous Sanity</p><p className="text-[8px] text-[var(--cs-muted)]">Session active</p></div></div><SlidersHorizontal size={14} className="text-[var(--cs-muted)]" /></div>
       <div className="mt-3 rounded-lg border border-[var(--cs-border)] bg-white p-3"><p className="font-mono text-[8px] uppercase tracking-[.12em] text-[var(--cs-muted)]">Session</p><p className="mt-1 text-[12px] font-bold text-[var(--cs-navy)]">New onboarding flow</p><p className="mt-2 font-mono text-[8px] uppercase tracking-[.12em] text-[var(--cs-muted)]">Task</p><p className="mt-1 text-[10px] leading-4 text-[var(--cs-muted)]">Create an account and invite a teammate.</p><div className="mt-3 flex items-center gap-2 border-t border-[var(--cs-border)] pt-2"><span className="flex size-5 items-center justify-center rounded-full bg-[var(--cs-surface)] text-[8px] font-bold text-[var(--cs-navy)]">OM</span><span className="text-[9px] font-semibold text-[var(--cs-muted)]">Operations Manager</span></div></div>
       <div className="mt-2 rounded-lg border border-[var(--cs-border)] bg-[var(--cs-surface)] p-3"><div className="flex items-center justify-between"><span className="text-[10px] font-bold text-[var(--cs-navy)]">Captured feedback</span><span className="rounded bg-[var(--cs-surface)] cs-feedback-tag px-1.5 py-0.5 font-mono text-[7px] text-[var(--cs-muted)]">01</span></div><p className="mt-2 text-[10px] leading-4 text-[var(--cs-muted)]">&quot;I&apos;m not sure whether this will invite the user immediately or just save the email.&quot;</p><div className="mt-3 flex gap-1.5"><span className="rounded bg-[var(--cs-surface)] cs-feedback-tag px-1.5 py-1 text-[7px] font-bold text-[var(--cs-muted)]">Clarity</span><span className="rounded bg-[var(--cs-surface)] cs-feedback-tag px-1.5 py-1 text-[7px] font-bold text-[var(--cs-muted)]">Medium</span></div></div>
-      <div className="mt-3 grid gap-1.5"><button type="button" className="flex items-center justify-center gap-1.5 rounded-md bg-[var(--cs-surface)] cs-illustration-action py-2.5 text-[9px] font-bold text-white" data-testid="button-panel-capture"><CircleDot size={11} /> Capture feedback</button><button type="button" className="flex items-center justify-center gap-1.5 rounded-md border border-[var(--cs-border)] bg-white py-2 text-[9px] font-bold text-[var(--cs-muted)]" data-testid="button-panel-observation"><Plus size={11} /> Add observation</button><button type="button" className="py-1 text-[8px] text-[var(--cs-muted)]" data-testid="button-panel-end-session">End session</button></div>
+      <div className="mt-3 grid gap-1.5"><span className="flex items-center justify-center gap-1.5 rounded-md bg-[var(--cs-surface)] cs-illustration-action py-2.5 text-[9px] font-bold text-white" data-testid="illustration-panel-capture"><CircleDot size={11} /> Capture feedback</span><span className="flex items-center justify-center gap-1.5 rounded-md border border-[var(--cs-border)] bg-white py-2 text-[9px] font-bold text-[var(--cs-muted)]" data-testid="illustration-panel-observation"><Plus size={11} /> Add observation</span><span className="py-1 text-[8px] text-[var(--cs-muted)]" data-testid="illustration-panel-end-session">End session</span></div>
     </div>
   );
 }
@@ -321,7 +304,7 @@ function DashboardMockup() {
   return (
     <div className="overflow-hidden rounded-xl border border-[var(--cs-border)] bg-[var(--cs-surface)] shadow-[0_15px_35px_rgba(28,60,49,.1)]" data-testid="mockup-dashboard">
       <div className="flex h-10 items-center justify-between border-b border-[var(--cs-border)] bg-white px-4"><div className="flex items-center gap-2"><span className="flex size-5 items-center justify-center rounded bg-[var(--cs-surface)] cs-illustration-icon text-[var(--cs-muted)]"><CircleDot size={11} /></span><span className="text-[10px] font-bold text-[var(--cs-navy)]">Evidence / Sessions</span></div><div className="flex items-center gap-2"><Search size={12} className="text-[var(--cs-muted)]" /><span className="size-5 rounded-full bg-[var(--cs-surface)]" /></div></div>
-      <div className="grid grid-cols-[106px_1fr] sm:grid-cols-[132px_1fr]"><aside className="border-r border-[var(--cs-border)] bg-[var(--cs-surface)] cs-illustration-tint p-3"><p className="font-mono text-[7px] uppercase tracking-wider text-[var(--cs-muted)]">Workspace</p><p className="mt-2 rounded bg-[var(--cs-surface)] cs-illustration-tint px-2 py-1.5 text-[8px] font-bold text-[var(--cs-muted)]">All sessions</p><p className="mt-1 px-2 py-1.5 text-[8px] text-[var(--cs-muted)]">Findings</p><p className="px-2 py-1.5 text-[8px] text-[var(--cs-muted)]">Testers</p></aside><main className="p-4 sm:p-5"><div className="flex items-end justify-between"><div><p className="text-[8px] font-mono uppercase tracking-wider text-[var(--cs-muted)]">Session summary</p><p className="mt-1 text-[15px] font-bold tracking-[-.04em] text-[var(--cs-navy)]">New onboarding flow</p></div><span className="rounded-full bg-[var(--cs-surface)] cs-success-badge px-2 py-1 text-[7px] font-bold text-[var(--cs-muted)]">Synthesized</span></div><div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">{[['6','Testers'],['24','Observations'],['3','Recurring themes'],['2','High priority']].map(([value,label]) => <div key={label} className="rounded border border-[var(--cs-border)] bg-white p-2.5"><p className="font-mono text-[17px] text-[var(--cs-navy)]">{value}</p><p className="mt-1 text-[7px] leading-3 text-[var(--cs-muted)]">{label}</p></div>)}</div><div className="mt-4 rounded border border-[var(--cs-border)] bg-white p-3"><div className="flex items-center gap-2"><Sparkles size={12} className="text-[var(--cs-muted)]" /><p className="text-[9px] font-bold text-[var(--cs-navy)]">Synthesized findings</p></div><div className="mt-3 space-y-3"><div className="flex gap-2"><span className="mt-1 size-1.5 shrink-0 rounded-full bg-[var(--cs-surface)]" /><p className="text-[8px] leading-4 text-[var(--cs-muted)]">Users consistently hesitated at the invite confirmation step.</p></div><div className="flex gap-2"><span className="mt-1 size-1.5 shrink-0 rounded-full bg-[var(--cs-surface)] cs-context-pin" /><p className="text-[8px] leading-4 text-[var(--cs-muted)]">4 of 6 testers expected the button to save rather than immediately send the invitation.</p></div><div className="border-t border-[var(--cs-border)] pt-2 text-[8px] font-bold text-[var(--cs-muted)]">Recommended follow-up: clarify button language and confirmation state.</div></div></div></main></div>
+      <div className="grid grid-cols-[106px_1fr] sm:grid-cols-[132px_1fr]"><aside className="border-r border-[var(--cs-border)] bg-[var(--cs-surface)] cs-illustration-tint p-3"><p className="font-mono text-[7px] uppercase tracking-wider text-[var(--cs-muted)]">Workspace</p><p className="mt-2 rounded bg-[var(--cs-surface)] cs-illustration-tint px-2 py-1.5 text-[8px] font-bold text-[var(--cs-muted)]">All sessions</p><p className="mt-1 px-2 py-1.5 text-[8px] text-[var(--cs-muted)]">Findings</p><p className="px-2 py-1.5 text-[8px] text-[var(--cs-muted)]">Testers</p></aside><div className="p-4 sm:p-5"><div className="flex items-end justify-between"><div><p className="text-[8px] font-mono uppercase tracking-wider text-[var(--cs-muted)]">Session summary</p><p className="mt-1 text-[15px] font-bold tracking-[-.04em] text-[var(--cs-navy)]">New onboarding flow</p></div><span className="rounded-full bg-[var(--cs-surface)] cs-success-badge px-2 py-1 text-[7px] font-bold text-[var(--cs-muted)]">Synthesized</span></div><div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">{[['6','Testers'],['24','Observations'],['3','Recurring themes'],['2','High priority']].map(([value,label]) => <div key={label} className="rounded border border-[var(--cs-border)] bg-white p-2.5"><p className="font-mono text-[17px] text-[var(--cs-navy)]">{value}</p><p className="mt-1 text-[7px] leading-3 text-[var(--cs-muted)]">{label}</p></div>)}</div><div className="mt-4 rounded border border-[var(--cs-border)] bg-white p-3"><div className="flex items-center gap-2"><Sparkles size={12} className="text-[var(--cs-muted)]" /><p className="text-[9px] font-bold text-[var(--cs-navy)]">Synthesized findings</p></div><div className="mt-3 space-y-3"><div className="flex gap-2"><span className="mt-1 size-1.5 shrink-0 rounded-full bg-[var(--cs-surface)]" /><p className="text-[8px] leading-4 text-[var(--cs-muted)]">Users consistently hesitated at the invite confirmation step.</p></div><div className="flex gap-2"><span className="mt-1 size-1.5 shrink-0 rounded-full bg-[var(--cs-surface)] cs-context-pin" /><p className="text-[8px] leading-4 text-[var(--cs-muted)]">4 of 6 testers expected the button to save rather than immediately send the invitation.</p></div><div className="border-t border-[var(--cs-border)] pt-2 text-[8px] font-bold text-[var(--cs-muted)]">Recommended follow-up: clarify button language and confirmation state.</div></div></div></div></div>
     </div>
   );
 }
@@ -385,12 +368,12 @@ function Comparison() {
     ['Structured sessions', true, false, false, true],
     ['Synthesizes findings across testers', true, false, false, false],
   ] as const;
-  const renderCell = (value: boolean | string) => value === true ? <Check size={15} className="mx-auto text-[var(--cs-muted)]" strokeWidth={2.5} /> : value === false ? <span className="text-[var(--cs-muted)]">—</span> : <span className="font-mono text-[9px] text-[var(--cs-muted)]">{value}</span>;
+const renderCell = (value: boolean | string) => value === true ? <><Check size={15} className="mx-auto text-[var(--cs-muted)]" strokeWidth={2.5} aria-hidden="true" /><span className="sr-only">Yes</span></> : value === false ? <><span aria-hidden="true" className="text-[var(--cs-muted)]">—</span><span className="sr-only">No</span></> : <span className="font-mono text-[9px] text-[var(--cs-muted)]">{value}</span>;
   return (
     <section id="comparison" className="bg-[var(--cs-surface)]">
       <div className="mx-auto max-w-[1240px] px-5 py-24 sm:px-8 lg:px-10 lg:py-32">
         <Reveal><SectionKicker>A clear category</SectionKicker><h2 className="max-w-[660px] text-[clamp(2rem,4vw,3.65rem)] font-semibold leading-[1.03] tracking-[-.065em] text-[var(--cs-navy)]">Human testing deserves more than a blank ticket.</h2><p className="mt-6 max-w-[480px] text-[14px] leading-6 text-[var(--cs-muted)]">Continuous Sanity sits between the product and the systems teams use to track it — preserving the human signal along the way.</p></Reveal>
-        <Reveal delay="reveal-delay-1" className="mt-14 overflow-x-auto rounded-2xl border border-[var(--cs-border)]"><table className="w-full min-w-[680px] border-collapse bg-[var(--cs-surface)] text-left" data-testid="comparison-table"><thead><tr className="border-b border-[var(--cs-border)]"><th className="w-[38%] px-5 py-4 text-[10px] font-mono uppercase tracking-[.12em] text-[var(--cs-muted)] sm:px-7">Capability</th><th className="bg-[var(--cs-surface)] px-3 py-4 text-center text-[10px] font-bold text-[var(--cs-navy)]">Continuous<br />Sanity</th><th className="px-3 py-4 text-center text-[10px] font-medium text-[var(--cs-muted)]">Bug tracker</th><th className="px-3 py-4 text-center text-[10px] font-medium text-[var(--cs-muted)]">Session replay</th><th className="px-3 py-4 text-center text-[10px] font-medium text-[var(--cs-muted)]">Automated testing</th></tr></thead><tbody>{rows.map(([label, ...values]) => <tr key={label} className="border-b border-[var(--cs-border)] last:border-0"><td className="px-5 py-5 text-[11px] font-semibold text-[var(--cs-navy)] sm:px-7">{label}</td>{values.map((value, index) => <td key={`${label}-${index}`} className={`px-3 py-5 text-center ${index === 0 ? 'bg-[var(--cs-surface)]' : ''}`}>{renderCell(value)}</td>)}</tr>)}</tbody></table></Reveal>
+        <Reveal delay="reveal-delay-1" className="mt-14 overflow-x-auto rounded-2xl border border-[var(--cs-border)]"><table className="w-full min-w-[680px] border-collapse bg-[var(--cs-surface)] text-left" data-testid="comparison-table"><caption className="sr-only">Comparison of Continuous Sanity, bug trackers, session replay and automated testing</caption><thead><tr className="border-b border-[var(--cs-border)]"><th scope="col" className="w-[38%] px-5 py-4 text-[10px] font-mono uppercase tracking-[.12em] text-[var(--cs-muted)] sm:px-7">Capability</th><th scope="col" className="bg-[var(--cs-surface)] px-3 py-4 text-center text-[10px] font-bold text-[var(--cs-navy)]">Continuous<br />Sanity</th><th scope="col" className="px-3 py-4 text-center text-[10px] font-medium text-[var(--cs-muted)]">Bug tracker</th><th scope="col" className="px-3 py-4 text-center text-[10px] font-medium text-[var(--cs-muted)]">Session replay</th><th scope="col" className="px-3 py-4 text-center text-[10px] font-medium text-[var(--cs-muted)]">Automated testing</th></tr></thead><tbody>{rows.map(([label, ...values]) => <tr key={label} className="border-b border-[var(--cs-border)] last:border-0"><th scope="row" className="px-5 py-5 text-[11px] font-semibold text-[var(--cs-navy)] sm:px-7">{label}</th>{values.map((value, index) => <td key={`${label}-${index}`} className={`px-3 py-5 text-center ${index === 0 ? 'bg-[var(--cs-surface)]' : ''}`}>{renderCell(value)}</td>)}</tr>)}</tbody></table></Reveal>
       </div>
     </section>
   );
@@ -426,7 +409,7 @@ function FinalCTA() {
 function Footer() {
   return (
     <footer className="bg-[var(--cs-surface)]">
-      <div className="mx-auto flex max-w-[1240px] flex-col gap-10 border-t border-[var(--cs-border)] px-5 py-8 sm:px-8 lg:flex-row lg:items-center lg:justify-between lg:px-10"><div><BrandMark light /><p className="mt-3 text-[12px] text-[var(--cs-muted)]">Human testing, captured properly.</p><p className="mt-1 font-mono text-[9px] text-[var(--cs-muted)]">Built in Blantyre, Malawi</p></div><nav className="flex flex-wrap gap-x-6 gap-y-3 text-[11px] text-[var(--cs-muted)]" aria-label="Footer navigation"><a href="#product" className="transition-colors hover:text-white" data-testid="link-footer-product">Product</a><a href="#comparison" className="transition-colors hover:text-white" data-testid="link-footer-privacy">Privacy</a><a href="mailto:hello@continuoussanity.com" className="transition-colors hover:text-white" data-testid="link-footer-contact">Contact</a></nav><p className="font-mono text-[9px] text-[var(--cs-muted)]">© 2026 Continuous Sanity</p></div>
+      <div className="mx-auto flex max-w-[1240px] flex-col gap-10 border-t border-[var(--cs-border)] px-5 py-8 sm:px-8 lg:flex-row lg:items-center lg:justify-between lg:px-10"><div><BrandMark light /><p className="mt-3 text-[12px] text-[var(--cs-muted)]">Human testing, captured properly.</p><p className="mt-1 font-mono text-[9px] text-[var(--cs-muted)]">Built in Blantyre, Malawi</p></div><nav className="flex flex-wrap gap-x-6 gap-y-3 text-[11px] text-[var(--cs-muted)]" aria-label="Footer navigation"><a href="#product" className="transition-colors hover:text-white" data-testid="link-footer-product">Product</a><a href="/privacy" className="transition-colors hover:text-white" data-testid="link-footer-privacy">Privacy</a><a href="mailto:hello@continuoussanity.com" className="transition-colors hover:text-white" data-testid="link-footer-contact">Contact</a></nav><p className="font-mono text-[9px] text-[var(--cs-muted)]">© 2026 Continuous Sanity</p></div>
     </footer>
   );
 }
@@ -472,8 +455,9 @@ function Home() {
   }, []);
   return (
     <div className="cs-brand min-h-[100dvh] overflow-x-hidden bg-[var(--cs-surface)]">
+      <a href="#main-content" className="skip-link">Skip to main content</a>
       <Header />
-      <main>
+      <main id="main-content" tabIndex={-1}>
         <Hero />
         <ProblemSection />
         <HowItWorks />
@@ -488,11 +472,37 @@ function Home() {
   );
 }
 
+function Privacy() {
+  useEffect(() => {
+    const previous = document.title;
+    document.title = 'Landing-page privacy | Continuous Sanity';
+    return () => { document.title = previous; };
+  }, []);
+  return (
+    <div className="cs-brand min-h-screen bg-[var(--cs-canvas)]">
+      <main className="mx-auto max-w-3xl px-6 py-16">
+        <a href="/" className="underline underline-offset-4">Back to Continuous Sanity</a>
+        <h1 className="mt-10 text-4xl font-semibold">Landing-page privacy</h1>
+        <div className="mt-8 space-y-6 leading-7 text-[var(--cs-muted)]">
+          <p>This notice describes campaign attribution on the Continuous Sanity landing page.</p>
+          <h2 className="text-xl font-semibold">Campaign attribution</h2>
+          <p>We retain utm_source, utm_medium, utm_campaign and utm_content in session storage for the current browser tab. When you click Book a demo, those parameters are included in the Calendly link.</p>
+          <p>Demo-click events contain the campaign source, medium, campaign, content and button location. This attribution code does not use tracking cookies, visitor identifiers or fingerprinting.</p>
+          <h2 className="text-xl font-semibold">External services and contact</h2>
+          <p>Bookings take place on Calendly, where its privacy terms apply. Run a pilot opens the separate Continuous Sanity application; this notice does not describe data collected during product testing sessions.</p>
+          <p>For privacy questions, email <a className="underline underline-offset-4" href="mailto:hello@continuoussanity.com">hello@continuoussanity.com</a>.</p>
+        </div>
+      </main>
+    </div>
+  );
+}
+
 function Router() {
   return (
     <RoutedErrorBoundary>
       <Switch>
         <Route path="/" component={Home} />
+        <Route path="/privacy" component={Privacy} />
         <Route component={NotFound} />
       </Switch>
     </RoutedErrorBoundary>
