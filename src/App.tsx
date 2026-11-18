@@ -37,6 +37,8 @@ import {
   type DemoCtaLocation,
 } from '@/lib/campaign-attribution';
 import NotFound from '@/pages/not-found';
+import { AnalyticsPreferences } from '@/components/analytics-consent';
+import { trackAnalyticsEvent } from '@/lib/analytics';
 
 const queryClient = new QueryClient();
 
@@ -401,7 +403,7 @@ function Hero() {
 function FinalCTA() {
   return (
     <section id="book-demo" className="relative overflow-hidden bg-[var(--cs-surface)]">
-      <div className="mx-auto max-w-[1240px] px-5 py-24 sm:px-8 lg:px-10 lg:py-32"><Reveal className="relative z-10 max-w-[760px]"><SectionKicker>See it in the work</SectionKicker><h2 className="text-[clamp(2.5rem,5vw,5.1rem)] font-semibold leading-[.98] tracking-[-.075em] text-[var(--cs-muted)]">Run your next test with <em className="font-serif font-normal text-[var(--cs-muted)]">Continuous Sanity.</em></h2><p className="mt-7 max-w-[480px] text-[15px] leading-7 text-[var(--cs-muted)]">Give a handful of testers a session, capture what happens in context, and see whether your team gets better evidence.</p><div className="mt-9 flex flex-col gap-3 sm:flex-row"><DemoLink location="footer" className="inline-flex items-center justify-center gap-2 rounded-lg bg-[var(--cs-surface)] px-5 py-3 text-[13px] font-bold text-[var(--cs-navy)] transition-transform hover:-translate-y-0.5" data-testid="link-book-demo-final">Book a demo <ArrowUpRight size={15} /></DemoLink><a href={PILOT_URL} className="inline-flex items-center justify-center gap-2 rounded-lg border border-[var(--cs-border)] px-5 py-3 text-[13px] font-bold text-[var(--cs-muted)] transition-colors hover:bg-[var(--cs-tint)]" data-testid="link-run-pilot-final">Run a pilot <ArrowRight size={15} /></a></div></Reveal></div>
+      <div className="mx-auto max-w-[1240px] px-5 py-24 sm:px-8 lg:px-10 lg:py-32"><Reveal className="relative z-10 max-w-[760px]"><SectionKicker>See it in the work</SectionKicker><h2 className="text-[clamp(2.5rem,5vw,5.1rem)] font-semibold leading-[.98] tracking-[-.075em] text-[var(--cs-muted)]">Run your next test with <em className="font-serif font-normal text-[var(--cs-muted)]">Continuous Sanity.</em></h2><p className="mt-7 max-w-[480px] text-[15px] leading-7 text-[var(--cs-muted)]">Give a handful of testers a session, capture what happens in context, and see whether your team gets better evidence.</p><div className="mt-9 flex flex-col gap-3 sm:flex-row"><DemoLink location="footer" className="inline-flex items-center justify-center gap-2 rounded-lg bg-[var(--cs-surface)] px-5 py-3 text-[13px] font-bold text-[var(--cs-navy)] transition-transform hover:-translate-y-0.5" data-testid="link-book-demo-final">Book a demo <ArrowUpRight size={15} /></DemoLink><a href={PILOT_URL} onClick={() => { const campaign = captureCampaignAttribution(); trackAnalyticsEvent('pilot_cta_clicked', { source: campaign.utm_source ?? null, medium: campaign.utm_medium ?? null, campaign: campaign.utm_campaign ?? null, content: campaign.utm_content ?? null, location: 'footer' }); }} className="inline-flex items-center justify-center gap-2 rounded-lg border border-[var(--cs-border)] px-5 py-3 text-[13px] font-bold text-[var(--cs-muted)] transition-colors hover:bg-[var(--cs-tint)]" data-testid="link-run-pilot-final">Run a pilot <ArrowRight size={15} /></a></div></Reveal></div>
     </section>
   );
 }
@@ -484,10 +486,14 @@ function Privacy() {
         <a href="/" className="underline underline-offset-4">Back to Continuous Sanity</a>
         <h1 className="mt-10 text-4xl font-semibold">Landing-page privacy</h1>
         <div className="mt-8 space-y-6 leading-7 text-[var(--cs-muted)]">
-          <p>This notice describes campaign attribution on the Continuous Sanity landing page.</p>
+          <p>This notice describes optional analytics and campaign attribution on the Continuous Sanity landing page.</p>
           <h2 className="text-xl font-semibold">Campaign attribution</h2>
-          <p>We retain utm_source, utm_medium, utm_campaign and utm_content in session storage for the current browser tab. When you click Book a demo, those parameters are included in the Calendly link.</p>
-          <p>Demo-click events contain the campaign source, medium, campaign, content and button location. This attribution code does not use tracking cookies, visitor identifiers or fingerprinting.</p>
+          <p>When analytics is accepted, we retain utm_source, utm_medium, utm_campaign and utm_content in session storage for the current browser tab. Current-link campaign parameters can still be passed to Calendly without accepting analytics.</p>
+          <p>With permission, demo-click events are sent to our first-party campaign endpoint and Google Analytics. They contain the campaign source, medium, campaign, content and button location.</p>
+          <h2 className="text-xl font-semibold">Google Analytics and your choice</h2>
+          <p>Google Analytics loads only after you accept analytics. It measures page views, device and usage information and demo or pilot clicks, and may use analytics cookies. Advertising consent remains denied. We do not enable Google Signals or ad personalisation in our tag configuration.</p>
+          <p>We remember your choice locally for up to 180 days. You can change it using Analytics preferences at the bottom of the page. Rejecting stops our analytics events, clears tab attribution and accessible Google Analytics cookies, and reloads the page if analytics was already loaded. It does not delete previously collected server-side data.</p>
+          <p>Google Analytics retention is controlled in our Analytics property. See <a href="https://policies.google.com/privacy" className="underline underline-offset-4">Google's privacy policy</a> for Google's processing, or contact us about retained data.</p>
           <h2 className="text-xl font-semibold">External services and contact</h2>
           <p>Bookings take place on Calendly, where its privacy terms apply. Run a pilot opens the separate Continuous Sanity application; this notice does not describe data collected during product testing sessions.</p>
           <p>For privacy questions, email <a className="underline underline-offset-4" href="mailto:hello@continuoussanity.com">hello@continuoussanity.com</a>.</p>
@@ -520,6 +526,7 @@ function App() {
       <TooltipProvider>
         <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
           <Router />
+          <AnalyticsPreferences />
         </WouterRouter>
         <Toaster />
       </TooltipProvider>

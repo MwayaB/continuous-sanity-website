@@ -23,7 +23,14 @@ PORT=5173 BASE_PATH=/ pnpm --dir artifacts/continuous-sanity build
 
 The landing page preserves `utm_source`, `utm_medium`, `utm_campaign`, and
 `utm_content` for the current browser tab and adds them to every Calendly demo
-link. No cookies, personal data, or fingerprinting are used.
+link. Campaign session storage and click logging require analytics acceptance.
+Current-URL attribution still reaches Calendly when analytics is rejected.
+
+Google Analytics (`G-ZECW06BNSX`) is loaded only after acceptance. Visitors can
+reject analytics or change their choice through Analytics preferences. The Google
+Tag Manager container is not also loaded, preventing duplicate installations.
+See [analytics setup and verification](docs/analytics.md) for events, consent
+behaviour, and the GA4 property settings to review before production.
 
 Demo clicks also dispatch a `demo_cta_clicked` browser event with campaign fields
 and a `location` of `hero`, `nav`, or `footer`. To retain these events, set

@@ -1,3 +1,5 @@
+import { getAnalyticsConsent, trackAnalyticsEvent } from './analytics';
+
 export const UTM_KEYS = [
   'utm_source',
   'utm_medium',
@@ -23,6 +25,9 @@ function readCampaign(search: string): CampaignAttribution {
 
 export function captureCampaignAttribution(): CampaignAttribution {
   const campaign = readCampaign(window.location.search);
+
+  // Current URL attribution still works without optional device storage.
+  if (getAnalyticsConsent() !== 'accepted') return campaign;
 
   try {
     if (Object.keys(campaign).length > 0) {
@@ -53,6 +58,7 @@ export function trackDemoCtaClick(
   campaign: CampaignAttribution,
   location: DemoCtaLocation,
 ): void {
+  if (getAnalyticsConsent() !== 'accepted') return;
   const detail = {
     source: campaign.utm_source ?? null,
     medium: campaign.utm_medium ?? null,
@@ -62,6 +68,7 @@ export function trackDemoCtaClick(
   };
 
   window.dispatchEvent(new CustomEvent('demo_cta_clicked', { detail }));
+  trackAnalyticsEvent('demo_cta_clicked', detail);
 
   const endpoint = import.meta.env.VITE_CAMPAIGN_EVENT_ENDPOINT;
   if (!endpoint) return;
