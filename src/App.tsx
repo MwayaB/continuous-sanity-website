@@ -346,7 +346,7 @@ function CaptureGrid() {
         <div className="mt-14 grid gap-px overflow-hidden rounded-2xl border border-[var(--cs-border)] bg-[var(--cs-surface)] sm:grid-cols-2 lg:grid-cols-3">
           {items.map(([title, copy, Icon], index) => <Reveal key={title} delay={`reveal-delay-${index % 3}`}><article className="group min-h-[190px] bg-[var(--cs-surface)] p-6 transition-colors duration-300 hover:bg-[var(--cs-tint)] sm:p-7" data-testid={`card-capture-${index}`}><Icon size={20} strokeWidth={1.5} className="text-[var(--cs-muted)] transition-transform duration-300 group-hover:translate-x-1" /><h3 className="mt-12 text-[16px] font-bold tracking-[-.03em] text-[var(--cs-navy)]">{title}</h3><p className="mt-2 max-w-[240px] text-[12px] leading-5 text-[var(--cs-muted)]">{copy}</p></article></Reveal>)}
         </div>
-        <p className="mt-6 text-[13px] leading-6 text-[var(--cs-muted)]">Widget screenshots are optional and require browser permission. Testers can submit feedback without a screenshot. Continuous Sanity does not capture navigation history, every click, session replay or video.</p>
+        <p className="mt-6 text-[13px] leading-6 text-[var(--cs-muted)]">Widget screenshots are optional and require browser permission. Testers can submit feedback without a screenshot. Continuous Sanity does not currently capture navigation history or every click. Session replay and video recording are not currently supported.</p>
       </div>
     </section>
   );
@@ -372,11 +372,11 @@ function Comparison() {
   const rows = [
     ['Understand how users think and feel through their feedback', true, false, false, false],
     ['Issue tracking and resolution', false, true, false, false],
-    ['Replay of user interactions', false, false, true, false],
+    ['Review what happened during use', false, false, true, false],
     ['Checks against expected behaviour', false, false, false, true],
     ['Turn UAT feedback into proposed action items', true, false, false, false],
   ] as const;
-  const headings = ['Workflow focus', 'Continuous Sanity', 'Bug tracker', 'Session replay', 'Automated testing'];
+  const headings = ['Current workflow focus', 'Continuous Sanity', 'Bug tracker', 'Session replay', 'Automated testing'];
   const renderCell = (focused: boolean) => focused
     ? <><Check size={16} strokeWidth={2.5} className="mx-auto text-[var(--cs-navy)]" aria-hidden="true" /><span className="sr-only">Highlighted focus</span></>
     : <><span aria-hidden="true">—</span><span className="sr-only">Not highlighted in this focus comparison; capabilities vary by tool</span></>;
@@ -384,7 +384,7 @@ function Comparison() {
     <section id="comparison" className="bg-[var(--cs-surface)]">
       <div className="mx-auto max-w-[1240px] px-5 py-24 sm:px-8 lg:px-10 lg:py-32">
         <Reveal><SectionKicker>A clear category</SectionKicker><h2 className="max-w-[660px] text-[clamp(2rem,4vw,3.65rem)] font-semibold leading-[1.03] tracking-[-.065em] text-[var(--cs-navy)]">The operating system for UAT.</h2><p className="mt-6 max-w-[480px] text-[14px] leading-6 text-[var(--cs-muted)]">Capture how users think and feel about the product you’ve built, and use that context to answer the question: what do you still need to address to serve them better?</p></Reveal>
-        <Reveal delay="reveal-delay-1" className="mt-14 rounded-2xl border border-[var(--cs-border)]"><div tabIndex={0} role="region" aria-labelledby="category-table-caption" className="overflow-x-auto rounded-2xl"><table className="w-full min-w-[680px] border-collapse bg-[var(--cs-surface)] text-left" data-testid="comparison-table"><caption id="category-table-caption" className="sr-only">Continuous Sanity alongside bug tracking, session replay and automated testing</caption><thead><tr className="border-b border-[var(--cs-border)]">{headings.map(heading => <th key={heading} scope="col" className="px-4 py-4 text-center text-[10px] font-bold text-[var(--cs-navy)]">{heading}</th>)}</tr></thead><tbody>{rows.map(([label, ...values]) => <tr key={label} className="border-b border-[var(--cs-border)] last:border-0"><th scope="row" className="px-5 py-5 text-[11px] font-semibold text-[var(--cs-navy)]">{label}</th>{values.map((value, index) => <td key={index} className="px-3 py-5 text-center text-[10px] leading-5 text-[var(--cs-muted)]">{renderCell(value)}</td>)}</tr>)}</tbody></table></div></Reveal><p className="mt-4 text-[12px] leading-5 text-[var(--cs-muted)]">Checks highlight each category’s focus. Dashes are not claims of missing features; capabilities vary by tool.</p>
+        <Reveal delay="reveal-delay-1" className="mt-14 rounded-2xl border border-[var(--cs-border)]"><div tabIndex={0} role="region" aria-labelledby="category-table-caption" className="overflow-x-auto rounded-2xl"><table className="w-full min-w-[680px] border-collapse bg-[var(--cs-surface)] text-left" data-testid="comparison-table"><caption id="category-table-caption" className="sr-only">Continuous Sanity alongside bug tracking, session replay and automated testing</caption><thead><tr className="border-b border-[var(--cs-border)]">{headings.map(heading => <th key={heading} scope="col" className="px-4 py-4 text-center text-[10px] font-bold text-[var(--cs-navy)]">{heading}</th>)}</tr></thead><tbody>{rows.map(([label, ...values]) => <tr key={label} className="border-b border-[var(--cs-border)] last:border-0"><th scope="row" className="px-5 py-5 text-[11px] font-semibold text-[var(--cs-navy)]">{label}</th>{values.map((value, index) => <td key={index} className="px-3 py-5 text-center text-[10px] leading-5 text-[var(--cs-muted)]">{renderCell(value)}</td>)}</tr>)}</tbody></table></div></Reveal><p className="mt-4 text-[12px] leading-5 text-[var(--cs-muted)]">These workflows can complement one another. Checks highlight current focus, not exclusive capabilities. Dashes do not mean a feature is absent; capabilities vary by tool.</p>
       </div>
     </section>
   );
