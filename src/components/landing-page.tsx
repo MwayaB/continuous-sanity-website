@@ -513,15 +513,7 @@ export default function LandingPage() {
         </section>
         <section id="who-its-for" className="people">
           <div className="wrap">
-            <div className="section-label">
-              <span className="signal" aria-hidden="true"></span> For the people
-              running UAT
-            </div>
-            <h2>
-              A shared session.
-              <br />
-              Different perspectives.
-            </h2>
+            <h2>Who it’s for</h2>
             <div className="people-grid">
               <article>
                 <span className="face calm" aria-hidden="true">
@@ -529,8 +521,8 @@ export default function LandingPage() {
                 </span>
                 <h3>Product teams</h3>
                 <p>
-                  Review feedback from the people testing your product before
-                  release.
+                  Use user feedback and supporting evidence to decide what your
+                  product needs next.
                 </p>
               </article>
               <article>
@@ -539,8 +531,8 @@ export default function LandingPage() {
                 </span>
                 <h3>QA and UAT teams</h3>
                 <p>
-                  Bring submitted observations into guided or exploratory
-                  testing rounds.
+                  Review UAT observations with product context and AI-assisted
+                  findings to help identify what needs attention.
                 </p>
               </article>
               <article>
@@ -549,7 +541,8 @@ export default function LandingPage() {
                 </span>
                 <h3>Agencies and delivery teams</h3>
                 <p>
-                  Bring client and business testers into a shared UAT session.
+                  Give clients a way to share feedback in context, then review
+                  proposed actions with your delivery team.
                 </p>
               </article>
             </div>
