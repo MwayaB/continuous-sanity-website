@@ -128,8 +128,8 @@
 .human-landing .button {
   display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 25px;
+  justify-content: center;
+  gap: 12px;
   background: var(--navy);
   color: white;
   padding: 15px 22px;
@@ -1657,4 +1657,25 @@
   font-weight: 750;
   line-height: 1.12;
   letter-spacing: -0.025em;
+}
+
+/* Keep CTA icons beside their labels at every width. */
+.human-landing .cta-label {
+  white-space: nowrap;
+}
+.human-landing .cta-icon {
+  display: block;
+  flex: 0 0 16px;
+  width: 16px;
+  height: 16px;
+}
+.human-landing .text-link {
+  gap: 10px;
+}
+@media (max-width: 760px) {
+  .human-landing .button,
+  .human-landing header nav .button {
+    justify-content: center;
+    gap: 10px;
+  }
 }

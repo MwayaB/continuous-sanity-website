@@ -1,3 +1,4 @@
+import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { useEffect, useRef, useState, type AnchorHTMLAttributes } from "react";
 import {
   appendCampaignToUrl,
@@ -98,7 +99,8 @@ function LandingHeader() {
           onClick={close}
           data-testid="link-book-demo-nav"
         >
-          Book a demo <span aria-hidden="true">↗</span>
+          <span className="cta-label">Book a demo</span>
+          <ArrowUpRight className="cta-icon" size={16} aria-hidden="true" />
         </DemoLink>
       </nav>
     </header>
@@ -212,10 +214,16 @@ export default function LandingPage() {
                 className="button"
                 data-testid="link-book-demo-hero"
               >
-                Book a demo <span aria-hidden="true">↗</span>
+                <span className="cta-label">Book a demo</span>
+                <ArrowUpRight
+                  className="cta-icon"
+                  size={16}
+                  aria-hidden="true"
+                />
               </DemoLink>
               <a className="text-link" href="#problem">
-                From confusion to clarity <span aria-hidden="true">↓</span>
+                <span className="cta-label">From confusion to clarity</span>
+                <ArrowDown className="cta-icon" size={16} aria-hidden="true" />
               </a>
             </div>
             <p className="quiet hero-note">
@@ -513,7 +521,7 @@ export default function LandingPage() {
         </section>
         <section id="who-its-for" className="people">
           <div className="wrap">
-            <h2>Who it’s for</h2>
+            <h2>Who it’s for.</h2>
             <div className="people-grid">
               <article>
                 <span className="face calm" aria-hidden="true">
@@ -634,7 +642,12 @@ export default function LandingPage() {
                   className="button"
                   data-testid="link-book-demo-final"
                 >
-                  Book a demo <span aria-hidden="true">↗</span>
+                  <span className="cta-label">Book a demo</span>
+                  <ArrowUpRight
+                    className="cta-icon"
+                    size={16}
+                    aria-hidden="true"
+                  />
                 </DemoLink>
                 <a
                   className="text-link"
@@ -642,7 +655,12 @@ export default function LandingPage() {
                   onClick={trackPilotClick}
                   data-testid="link-run-pilot-final"
                 >
-                  Run a pilot <span aria-hidden="true">↗</span>
+                  <span className="cta-label">Run a pilot</span>
+                  <ArrowUpRight
+                    className="cta-icon"
+                    size={16}
+                    aria-hidden="true"
+                  />
                 </a>
               </div>
             </div>
