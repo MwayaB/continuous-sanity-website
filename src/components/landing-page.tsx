@@ -239,9 +239,9 @@ export default function LandingPage() {
           </div>
           <div className="split">
             <h2>
-              Keep the person
+              From real hesitation
               <br />
-              behind the ticket.
+              to a clear fix.
             </h2>
             <p className="body-copy">
               An email or issue report can become a dev ticket with the original
