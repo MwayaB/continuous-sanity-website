@@ -175,10 +175,7 @@ function ProductExample() {
               <dd>Review the checkout</dd>
             </div>
           </dl>
-          <p className="quiet">
-            Screenshots are optional. Widget capture requires browser
-            permission.
-          </p>
+
         </div>
       </div>
     </figure>
@@ -348,7 +345,7 @@ export default function LandingPage() {
                 <h3>Keep the context.</h3>
                 <p>
                   Bring comments together with available page, element and
-                  optional screenshot context.
+                  screenshot context.
                 </p>
               </li>
               <li>
@@ -400,7 +397,7 @@ export default function LandingPage() {
               <ul>
                 <li>Submit feedback through the widget or Chrome extension.</li>
                 <li>Add a comment with selected page and element context.</li>
-                <li>Include an optional screenshot when capture succeeds.</li>
+                <li>Attach a screenshot to support the observation.</li>
               </ul>
               <div className="perspective-example">
                 <span className="pin" aria-hidden="true">
